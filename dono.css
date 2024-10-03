@@ -189,3 +189,20 @@ th:nth-child(7), td:nth-child(7) { /* Ação */
         padding: 0 15px; /* Adiciona um pequeno espaçamento lateral */
     }
 }
+
+/* Estilos para o botão de logout */
+button {
+    background-color: #f44336; /* Cor de fundo vermelho */
+    color: white; /* Cor do texto branco */
+    padding: 10px 20px; /* Espaçamento interno */
+    border: none; /* Sem borda */
+    border-radius: 5px; /* Bordas arredondadas */
+    cursor: pointer; /* Cursor de mão ao passar sobre o botão */
+    font-size: 16px; /* Tamanho da fonte */
+    transition: background-color 0.3s ease; /* Efeito suave na mudança de cor */
+}
+
+/* Efeito hover (quando o mouse está sobre o botão) */
+button:hover {
+    background-color: #d32f2f; /* Cor de fundo mais escura no hover */
+}
