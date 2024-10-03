@@ -453,3 +453,33 @@ form button:hover {
     cursor: not-allowed; /* Cursor de bloqueio */
 }
 
+.horarios button.indisponivel:hover {
+    background-color: #f44336; /* Cor de fundo vermelha */
+}
+
+.login-button {
+    background-color: #28a745; /* Verde */
+    color: white; /* Texto branco */
+    border: none; /* Sem borda */
+    padding: 10px 0; /* Espaçamento interno do botão */
+    border-radius: 20px; /* Bordas arredondadas */
+    cursor: pointer; /* Cursor em forma de mão ao passar sobre o botão */
+    transition: background-color 0.3s; /* Transição suave ao mudar a cor */
+    width: 12%; /* Largura do botão */
+    font-size: 15px; /* Tamanho da fonte */
+    font-family: 'Arial', sans-serif; /* Fonte */
+    text-align: center; /* Centraliza o texto */
+}
+
+/* Efeito de hover para o botão de login */
+.login-button:hover {
+    background-color: #218838; /* Verde mais escuro ao passar o mouse */
+}
+
+/* Estilo responsivo para telas menores */
+@media screen and (max-width: 768px) {
+    .login-button {
+        width: 80%; /* Ajusta a largura em telas menores */
+    }
+}
+
