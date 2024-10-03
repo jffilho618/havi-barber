@@ -44,7 +44,7 @@
 
     <div class="service">
         <div class="icon">
-            <img src="imagens\pigmenta��o.png" alt="Pigmentação">
+            <img src="imagens/pigmenta��o.png" alt="Pigmentação">
         </div>
         <p>PIGMENTAÇÃO <span>R$ 25,00</span></p>
         <button data-servico="Pigmentação" data-preco="R$ 25,00" onclick="changeScreen(this)">Agendar</button>
@@ -77,7 +77,7 @@
         <input type="tel" id="telefone" name="telefone" required>
 
         <label for="data">Data</label>
-        <input type="date" id="data" name="data" required>
+        <input type="date" id="data" name="data" required onchange="carregarHorariosDisponiveis()">
 
         <label for="horario">Horário</label>
         <div class="horarios">
@@ -130,9 +130,42 @@
 </div>
 
 
-
-
 <script>
+
+function carregarHorariosDisponiveis() {
+    const data = document.getElementById('data').value;
+    console.log('Data selecionada:', data);
+    if (!data) return;
+
+    fetch(`/horarios_disponiveis?data=${data}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro na resposta da API');
+            }
+            return response.json();
+        })
+        .then(horarios => {
+            console.log('Horários disponíveis:', horarios);
+            const horariosContainer = document.querySelector('.horarios');
+            horariosContainer.innerHTML = ''; // Limpa horários anteriores
+
+            horarios.forEach(horario => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.textContent = horario;
+                button.onclick = () => setHorario(horario);
+                horariosContainer.appendChild(button);
+            });
+        })
+        .catch(error => {
+            console.error('Erro ao carregar horários:', error);
+        });
+}
+
+
+
+
+
     let servicoSelecionado = "";
     let precoSelecionado = "";
 
