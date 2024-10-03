@@ -14,6 +14,9 @@
         <img src="./imagens/logo.png.jpg" alt="Logo Havi Barber">
         <p>📍 Rua São Domingos Nº 807 - Cidade Nova</p>
         <button id="meus-agendamentos-btn" onclick="abrirModalTelefone()">Meus Agendamentos</button>
+        <!-- Botão de login para o barbeiro -->
+        <a href="/login" class="btn login-button">Login como Barbeiro</a>
+
     </div>
 
     <h2>Selecione um serviço:</h2>
@@ -255,7 +258,6 @@ async function confirmarAgendamento() {
         mostrarErro(data, 'Data é obrigatória.');
         camposValidos = false;
     } else {
-        // Verificação se a data é menor que a data de hoje
         const hoje = new Date().toISOString().split('T')[0];  // Data atual no formato yyyy-mm-dd
         if (data.value < hoje) {
             mostrarErro(data, 'Não é possível agendar para uma data no passado.');
@@ -277,19 +279,18 @@ async function confirmarAgendamento() {
         return;
     }
 
-    // Cria uma chave única para a data e horário, ignorando o serviço
+    // Log para verificar valores de data e horário
+    console.log("Data selecionada:", data.value);
+    console.log("Horário selecionado:", horario.value);
+
     const chaveAgendamento = `${data.value} ${horario.value}`;
 
-    // Verifica se o horário já está agendado, independente do serviço
-    console.log(`Verificando se o horário ${chaveAgendamento} está disponível...`); // Log de depuração
-
     if (horariosAgendados[chaveAgendamento]) {
-        console.log(`Horário indisponível: ${chaveAgendamento}`); // Log de depuração
+        console.log(`Horário indisponível: ${chaveAgendamento}`);
         alert(`O horário ${horario.value} do dia ${data.value} já está agendado. Por favor, escolha outro horário.`);
-        return; // Sai da função se o horário estiver ocupado
+        return;
     }
 
-    // Pergunta ao usuário se deseja continuar
     const confirmar = confirm(`Você deseja agendar para ${data.value} às ${horario.value}?`);
 
     if (confirmar) {
@@ -312,12 +313,16 @@ async function confirmarAgendamento() {
             });
 
             if (response.ok) {
-                const data = await response.json();
-                console.log('Agendamento confirmado:', data);
+                const dataResponse = await response.json();
+                console.log('Agendamento confirmado:', dataResponse);
 
-                // Adiciona o horário agendado ao objeto, independente do serviço
-                horariosAgendados[chaveAgendamento] = true; // Armazena o horário como agendado
-                console.log(`Horário agendado com sucesso: ${chaveAgendamento}`); // Log de depuração
+                horariosAgendados[chaveAgendamento] = true;
+
+                // Verificar se nome, data e horário estão corretos antes de montar a mensagem
+                console.log("Valores para mensagem WhatsApp:");
+                console.log("Nome:", nome.value);
+                console.log("Data:", data.value);
+                console.log("Horário:", horario.value);
 
                 // Monta a mensagem para o WhatsApp
                 const mensagem = `Olá, meu nome é ${nome.value}. Gostaria de confirmar o agendamento para ${data.value} às ${horario.value}. Meu telefone é ${telefone.value}.`;
@@ -325,8 +330,7 @@ async function confirmarAgendamento() {
                 const numeroWhatsapp = "5599991330396";
                 const link = `https://wa.me/${numeroWhatsapp}?text=${mensagemCodificada}`;
 
-                // Redireciona para o WhatsApp
-                window.location.href = link;  // Redireciona o navegador para o link do WhatsApp
+                window.location.href = link;
             } else if (response.status === 409) {
                 alert('O horário já foi agendado por outro cliente. Por favor, escolha outro horário.');
             } else {
@@ -341,6 +345,7 @@ async function confirmarAgendamento() {
         alert('Agendamento cancelado.');
     }
 }
+
 
 
     // Função para abrir o modal de telefone e buscar agendamentos
@@ -420,7 +425,7 @@ async function confirmarAgendamento() {
 
                 // Cria o botão de remover
                 const removerButton = document.createElement('button');
-                removerButton.textContent = 'Remover';
+                removerButton.textContent = 'Cancelar';
                 removerButton.classList.add('remove-button'); // Adiciona a classe de estilo para o botão;
                 removerButton.onclick = () => verificarCancelamentoEremoverAgendamento(agendamento._id, agendamento.data, agendamento.horario);
 

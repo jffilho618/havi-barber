@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Havi Barber</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Login</h1>
+        <form id="loginForm" method="POST" action="/login">
+            <div class="input-group">
+                <label for="usuario">Usuário:</label>
+                <input type="text" id="usuario" name="usuario" required>
+            </div>
+            <div class="input-group">
+                <label for="senha">Senha:</label>
+                <input type="password" id="senha" name="senha" required>
+            </div>
+            <button type="submit">Entrar</button>
+            <div id="error-message" class="error-message"></div>
+        </form>
+    </div>
+
+    <script> 
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+    // Aqui você pode adicionar validações ou manipulações antes do envio do formulário.
+    const usuario = document.getElementById('usuario').value;
+    const senha = document.getElementById('senha').value;
+
+    // Exemplo de validação simples
+    if (usuario === '' || senha === '') {
+        event.preventDefault();
+        document.getElementById('error-message').textContent = 'Por favor, preencha todos os campos.';
+    }
+});
+
+
+    </script>
+</body>
+</html>
