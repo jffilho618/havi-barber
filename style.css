@@ -446,3 +446,10 @@ form button:hover {
         margin: 5px; /* Menos margem em telas pequenas */
     }
 }
+
+.horarios button.indisponivel {
+    background-color: #f44336; /* Cor de fundo vermelha */
+    color: white; /* Texto em branco */
+    cursor: not-allowed; /* Cursor de bloqueio */
+}
+
