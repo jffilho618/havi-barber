@@ -32,10 +32,11 @@ def login():
     return render_template('login.html')  # Página de login
 
 # Logout
-@app.route('/logout')
+@app.route('/logout', methods=['POST'])
 def logout():
     session.pop('usuario', None)
-    return redirect(url_for('index'))  # Redireciona para a página inicial do cliente
+    return redirect(url_for('index'))  # Redireciona para a página inicial
+
 
 # Proteção da rota para barbeiro
 def login_required(f):
@@ -57,7 +58,8 @@ def index():
 def dono():
     return render_template('dono.html')  # Página de gerenciamento dos agendamentos
 
-# API de criação de agendamento (acessível pelo cliente)
+from datetime import datetime
+
 @app.route('/agendamentos', methods=['POST'])
 def create_agendamento():
     data = request.json
@@ -73,10 +75,22 @@ def create_agendamento():
     if agendamento_existente:
         return jsonify({"error": "Horário já reservado."}), 409  # Conflito
 
+    # Verifica se o horário é no passado
+    agendamento_datetime_str = f"{data_agendamento}T{horario}"
+    agendamento_datetime = datetime.strptime(agendamento_datetime_str, "%Y-%m-%dT%H:%M")
+
+    # Obtém a data e hora atual
+    data_hora_atual = datetime.now()
+
+    if agendamento_datetime < data_hora_atual:
+        return jsonify({"error": "Não é possível agendar para um horário no passado."}), 400  # Solicitação inválida
+
+    # Insere o agendamento no banco de dados
     result = agendamentos_collection.insert_one(data)
     data['_id'] = str(result.inserted_id)
 
     return jsonify(data), 201
+
 
 # API para obter todos os agendamentos (somente barbeiro)
 @app.route('/agendamentos', methods=['GET'])
@@ -129,7 +143,6 @@ def get_agendamentos_por_telefone():
 
 # API para remover agendamento (somente barbeiro)
 @app.route('/agendamentos/<id>', methods=['DELETE'])
-@login_required
 def remover_agendamento(id):
     agendamento = agendamentos_collection.find_one({"_id": ObjectId(id)})
 
