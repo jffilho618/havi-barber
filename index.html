@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Havi Barber</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Tela 1 -->
+<section id="tela-1" class="active">
+    <div class="header">
+        <img src="./imagens/logo.png.jpg" alt="Logo Havi Barber">
+        <p>📍 Rua São Domingos Nº 807 - Cidade Nova</p>
+        <button id="meus-agendamentos-btn" onclick="abrirModalTelefone()">Meus Agendamentos</button>
+    </div>
+
+    <h2>Selecione um serviço:</h2>
+
+    <div class="service">
+        <div class="icon">
+            <img src="./imagens/corte.png" alt="Corte">
+        </div>
+        <p>CORTE <span>R$ 20,00</span></p>
+        <button data-servico="Corte" data-preco="R$ 20,00" onclick="changeScreen(this)">Agendar</button>
+    </div>
+
+    <div class="service">
+        <div class="icon">
+            <img src="./imagens/navalha.png" alt="Navalhado">
+        </div>
+        <p>NAVALHADO <span>R$ 25,00</span></p>
+        <button data-servico="Navalhado" data-preco="R$ 25,00" onclick="changeScreen(this)">Agendar</button>
+    </div>
+
+    <div class="service">
+        <div class="icon">
+            <img src="./imagens/barba e corte.png" alt="Corte + Barba">
+        </div>
+        <p>CORTE + BARBA <span>R$ 45,00</span></p>
+        <button data-servico="Corte + Barba" data-preco="R$ 45,00" onclick="changeScreen(this)">Agendar</button>
+    </div>
+
+    <div class="service">
+        <div class="icon">
+            <img src="imagens\pigmenta��o.png" alt="Pigmentação">
+        </div>
+        <p>PIGMENTAÇÃO <span>R$ 25,00</span></p>
+        <button data-servico="Pigmentação" data-preco="R$ 25,00" onclick="changeScreen(this)">Agendar</button>
+    </div>
+
+    <div class="service">
+        <div class="icon">
+            <img src="./imagens/sombrancelha.png" alt="Sobrancelha">
+        </div>
+        <p>SOBRANCELHA <span>R$ 5,00</span></p>
+        <button data-servico="Sobrancelha" data-preco="R$ 5,00" onclick="changeScreen(this)">Agendar</button>
+    </div>
+</section>
+
+<!-- Tela 2 -->
+<section id="tela-2">
+    <div class="header">
+        <img src="./imagens/logo.png.jpg" alt="Logo Havi Barber">
+        <p>📍 Rua São Domingos Nº 807 - Cidade Nova</p>
+        <button onclick="changeScreen()">Voltar</button>
+    </div>
+
+    <h2>Agende seu horário:</h2>
+
+    <form id="agendamentoForm">
+        <label for="nome">Nome</label>
+        <input type="text" id="nome" name="nome" required>
+
+        <label for="telefone">Telefone</label>
+        <input type="tel" id="telefone" name="telefone" required>
+
+        <label for="data">Data</label>
+        <input type="date" id="data" name="data" required>
+
+        <label for="horario">Horário</label>
+        <div class="horarios">
+            <button type="button" onclick="setHorario('09:00')">09:00</button>
+            <button type="button" onclick="setHorario('09:40')">09:40</button>
+            <button type="button" onclick="setHorario('10:20')">10:20</button>
+            <button type="button" onclick="setHorario('11:00')">11:00</button>
+            <button type="button" onclick="setHorario('13:00')">13:00</button>
+            <button type="button" onclick="setHorario('13:40')">13:40</button>
+            <button type="button" onclick="setHorario('14:20')">14:20</button>
+            <button type="button" onclick="setHorario('15:00')">15:00</button>
+            <button type="button" onclick="setHorario('15:40')">15:40</button>
+            <button type="button" onclick="setHorario('16:20')">16:20</button>
+            <button type="button" onclick="setHorario('17:00')">17:00</button>
+            <button type="button" onclick="setHorario('17:40')">17:40</button>
+            <button type="button" onclick="setHorario('18:20')">18:20</button>
+            <button type="button" onclick="setHorario('19:00')">19:00</button>
+        </div>
+
+        <input type="hidden" id="horario" name="horario" required>
+
+        <button type="button" onclick="confirmarAgendamento()">Confirmar Agendamento</button>
+    </form>
+</section>
+
+<!-- Modal para Capturar Telefone -->
+<div id="telefoneModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="fecharModal()">&times;</span>
+        <h2>Confirme o seu número</h2>
+        <p>Por favor, escreva o número do celular usado para agendar o serviço.</p>
+        <label for="telefoneModalInput">Celular (WhatsApp)</label>
+        <input type="tel" id="telefoneModalInput" name="telefoneModalInput" required>
+        <div class="modal-buttons">
+            <button id="voltarBtn" class="modal-button" onclick="fecharModal()">Voltar</button>
+            <button id="confirmarBtn" class="modal-button confirm" onclick="buscarAgendamentosPorTelefone()">Confirmar</button>
+        </div>
+    </div>
+</div>
+
+ <!-- Modal para Exibir Agendamentos  -->
+ <div id="modal-agendamentos" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="fecharModalAgendamentos()">&times;</span>
+        <h2>Agendamentos Futuros</h2>
+        <div id="agendamento-corpo" class="cartao-container">
+            <!-- Os cartões serão inseridos aqui dinamicamente  -->
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+    let servicoSelecionado = "";
+    let precoSelecionado = "";
+
+    // Armazena os horários agendados (independente do serviço)
+    const horariosAgendados = {};
+
+    function changeScreen(button) {
+        const tela1 = document.getElementById('tela-1');
+        const tela2 = document.getElementById('tela-2');
+
+        if (tela1.classList.contains('active')) {
+            tela1.classList.remove('active');
+            tela2.classList.add('active');
+
+            servicoSelecionado = button.getAttribute('data-servico');
+            precoSelecionado = button.getAttribute('data-preco');
+        } else {
+            tela2.classList.remove('active');
+            tela1.classList.add('active');
+        }
+    }
+
+    function setHorario(horarioSelecionado) {
+        document.getElementById('horario').value = horarioSelecionado;
+
+        const botoesHorarios = document.querySelectorAll('.horarios button');
+        botoesHorarios.forEach((botao) => {
+            botao.classList.remove('selected');
+        });
+
+        const botaoSelecionado = Array.from(botoesHorarios).find(
+            (botao) => botao.textContent === horarioSelecionado
+        );
+        if (botaoSelecionado) {
+            botaoSelecionado.classList.add('selected');
+        }
+    }
+
+    // Função para mostrar a mensagem de erro
+    function mostrarErro(campo, mensagem) {
+        const elementoErro = campo.nextElementSibling;
+        if (elementoErro) {
+            elementoErro.textContent = mensagem;
+            elementoErro.style.color = 'red';
+        }
+    }
+
+    // Função para limpar a mensagem de erro
+    function limparErro(campo) {
+        const elementoErro = campo.nextElementSibling;
+        if (elementoErro) {
+            elementoErro.textContent = '';
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+    // Definindo a data mínima no campo de data como a data atual
+    const dataInput = document.getElementById('data');
+    const hoje = new Date().toISOString().split('T')[0];  // Obtém a data atual no formato yyyy-mm-dd
+    dataInput.setAttribute('min', hoje);  // Define o mínimo do input de data como a data de hoje
+});
+
+async function confirmarAgendamento() {
+    const nome = document.getElementById('nome');
+    const telefone = document.getElementById('telefone');
+    const data = document.getElementById('data');
+    const horario = document.getElementById('horario');
+
+    let camposValidos = true;
+
+    // Verificação dos campos
+    if (nome.value.trim() === '') {
+        mostrarErro(nome, 'Nome é obrigatório.');
+        camposValidos = false;
+    } else {
+        limparErro(nome);
+    }
+
+    if (telefone.value.trim() === '') {
+        mostrarErro(telefone, 'Telefone é obrigatório.');
+        camposValidos = false;
+    } else {
+        limparErro(telefone);
+    }
+
+    if (data.value.trim() === '') {
+        mostrarErro(data, 'Data é obrigatória.');
+        camposValidos = false;
+    } else {
+        // Verificação se a data é menor que a data de hoje
+        const hoje = new Date().toISOString().split('T')[0];  // Data atual no formato yyyy-mm-dd
+        if (data.value < hoje) {
+            mostrarErro(data, 'Não é possível agendar para uma data no passado.');
+            camposValidos = false;
+        } else {
+            limparErro(data);
+        }
+    }
+
+    if (horario.value.trim() === '') {
+        mostrarErro(horario, 'Horário é obrigatório.');
+        camposValidos = false;
+    } else {
+        limparErro(horario);
+    }
+
+    // Se houver algum campo inválido, não prosseguir
+    if (!camposValidos) {
+        return;
+    }
+
+    // Cria uma chave única para a data e horário, ignorando o serviço
+    const chaveAgendamento = `${data.value} ${horario.value}`;
+
+    // Verifica se o horário já está agendado, independente do serviço
+    console.log(`Verificando se o horário ${chaveAgendamento} está disponível...`); // Log de depuração
+
+    if (horariosAgendados[chaveAgendamento]) {
+        console.log(`Horário indisponível: ${chaveAgendamento}`); // Log de depuração
+        alert(`O horário ${horario.value} do dia ${data.value} já está agendado. Por favor, escolha outro horário.`);
+        return; // Sai da função se o horário estiver ocupado
+    }
+
+    // Pergunta ao usuário se deseja continuar
+    const confirmar = confirm(`Você deseja agendar para ${data.value} às ${horario.value}?`);
+
+    if (confirmar) {
+        const agendamento = {
+            nome: nome.value,
+            telefone: telefone.value,
+            data: data.value,
+            horario: horario.value,
+            servico: servicoSelecionado,
+            preco: precoSelecionado
+        };
+
+        try {
+            const response = await fetch('/agendamentos', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(agendamento),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Agendamento confirmado:', data);
+
+                // Adiciona o horário agendado ao objeto, independente do serviço
+                horariosAgendados[chaveAgendamento] = true; // Armazena o horário como agendado
+                console.log(`Horário agendado com sucesso: ${chaveAgendamento}`); // Log de depuração
+
+                // Monta a mensagem para o WhatsApp
+                const mensagem = `Olá, meu nome é ${nome.value}. Gostaria de confirmar o agendamento para ${data.value} às ${horario.value}. Meu telefone é ${telefone.value}.`;
+                const mensagemCodificada = encodeURIComponent(mensagem);
+                const numeroWhatsapp = "5599991330396";
+                const link = `https://wa.me/${numeroWhatsapp}?text=${mensagemCodificada}`;
+
+                // Redireciona para o WhatsApp
+                window.location.href = link;  // Redireciona o navegador para o link do WhatsApp
+            } else if (response.status === 409) {
+                alert('O horário já foi agendado por outro cliente. Por favor, escolha outro horário.');
+            } else {
+                console.error('Erro ao confirmar agendamento');
+                alert('Ocorreu um erro ao tentar confirmar o agendamento. Tente novamente.');
+            }
+        } catch (error) {
+            console.error('Erro de comunicação com o servidor:', error);
+            alert('Erro de comunicação com o servidor. Por favor, tente novamente mais tarde.');
+        }
+    } else {
+        alert('Agendamento cancelado.');
+    }
+}
+
+
+    // Função para abrir o modal de telefone e buscar agendamentos
+    function abrirModalTelefone() {
+    const modal = document.getElementById('telefoneModal');
+    modal.style.display = 'block';  // Exibe o modal
+}
+
+    function fecharModal() {
+        const modal = document.getElementById('telefoneModal');
+        modal.style.display = 'none';  // Esconde o modal
+    }
+
+
+    async function buscarAgendamentosPorTelefone() {
+    const telefone = document.getElementById('telefoneModalInput').value;
+    const tabelaBody = document.querySelector('#agendamento-corpo');
+
+    // Validação mais robusta do telefone (exemplo para 10 ou 11 dígitos)
+    const telefoneRegex = /^\d{10,11}$/;
+    if (!telefoneRegex.test(telefone)) {
+        alert("Por favor, insira um número de telefone válido.");
+        return;
+    }
+
+    try {
+        // Faz uma requisição para a API com o telefone digitado
+        const response = await fetch('/agendamentos/telefone', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ telefone })
+        });
+
+        // Verifica se houve algum erro na resposta
+        if (!response.ok) {
+            const error = await response.json();
+            alert(error.message || 'Erro ao buscar agendamentos.');
+            return;
+        }
+
+        const agendamentos = await response.json();
+        tabelaBody.innerHTML = '';  // Limpa o corpo antes de inserir novos agendamentos
+
+        // Verifica se há agendamentos
+        if (agendamentos.length === 0) {
+            const card = document.createElement('div');
+            card.classList.add('card');
+            card.textContent = 'Nenhum agendamento encontrado';
+            tabelaBody.appendChild(card);
+        } else {
+            // Itera pelos agendamentos e cria um cartão para cada um
+            agendamentos.forEach(agendamento => {
+                // Cria um novo elemento de cartão
+                const card = document.createElement('div');
+                card.classList.add('card'); // Adiciona a classe de estilo para o cartão
+
+                // Cria os elementos para exibir os dados
+                const nome = document.createElement('h3');
+                nome.textContent = agendamento.nome;
+
+                const telefone = document.createElement('p');
+                telefone.textContent = `Telefone: ${agendamento.telefone}`;
+
+                const data = document.createElement('p');
+                data.textContent = `Data: ${agendamento.data}`;
+
+                const horario = document.createElement('p');
+                horario.textContent = `Horário: ${agendamento.horario}`;
+
+                const servico = document.createElement('p');
+                servico.textContent = `Serviço: ${agendamento.servico}`;
+
+                const preco = document.createElement('p');
+                preco.textContent = `Preço: ${agendamento.preco}`;
+
+                // Cria o botão de remover
+                const removerButton = document.createElement('button');
+                removerButton.textContent = 'Remover';
+                removerButton.classList.add('remove-button'); // Adiciona a classe de estilo para o botão;
+                removerButton.onclick = () => verificarCancelamentoEremoverAgendamento(agendamento._id, agendamento.data, agendamento.horario);
+
+                // Adiciona os elementos ao cartão
+                card.appendChild(nome);
+                card.appendChild(telefone);
+                card.appendChild(data);
+                card.appendChild(horario);
+                card.appendChild(servico);
+                card.appendChild(preco);
+                card.appendChild(removerButton);
+
+                // Adiciona o cartão ao corpo da tabela
+                tabelaBody.appendChild(card);
+            });
+        }
+
+        // Fecha o modal de telefone e exibe o modal de agendamentos
+        document.getElementById('telefoneModal').style.display = 'none';
+        document.getElementById('modal-agendamentos').style.display = 'block';
+
+    } catch (error) {
+        console.error('Erro ao buscar agendamentos:', error);
+        alert('Ocorreu um erro ao buscar agendamentos.');
+    }
+}
+
+async function verificarCancelamentoEremoverAgendamento(id, dataAgendamento, horarioAgendamento) {
+    // Converte a data e hora do agendamento para um objeto Date
+    const agendamentoDataHora = new Date(`${dataAgendamento}T${horarioAgendamento}`);
+    
+    // Obtém a data e hora atuais
+    const dataHoraAtual = new Date();
+    
+    // Calcula a diferença em milissegundos
+    const diferencaMillis = agendamentoDataHora - dataHoraAtual;
+    
+    // Converte a diferença para horas
+    const diferencaHoras = diferencaMillis / (1000 * 60 * 60);
+
+    // Verifica se a diferença é maior ou igual a 1 hora
+    if (diferencaHoras >= 1) {
+        // Chama a função de remover agendamento
+        await removerAgendamento(id);
+    } else {
+        alert('Você só pode cancelar o agendamento até 1 hora antes do horário agendado.');
+    }
+}
+
+async function removerAgendamento(id) {
+    const confirma = confirm('Tem certeza que deseja remover este agendamento?');
+    if (confirma) {
+        try {
+            const response = await fetch(`/agendamentos/${id}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                alert('Agendamento removido com sucesso!');
+                location.reload(); // Atualiza a página para refletir a remoção
+            } else {
+                const error = await response.json();
+                alert(error.message || 'Erro ao remover agendamento.');
+            }
+        } catch (error) {
+            console.error('Erro ao remover agendamento:', error);
+            alert('Ocorreu um erro ao tentar remover o agendamento.');
+        }
+    }
+}
+
+
+
+    function abrirModalAgendamentos() {
+        const modalAgendamentos = document.getElementById('modal-agendamentos');
+        modalAgendamentos.style.display = 'block';  // Exibe o modal de agendamentos
+    }
+
+    function fecharModalAgendamentos() {
+        const modalAgendamentos = document.getElementById('modal-agendamentos');
+        modalAgendamentos.style.display = 'none';  // Esconde o modal de agendamentos
+    }
+
+    window.onclick = function(event) {
+        const modalTelefone = document.getElementById('telefoneModal');
+        const modalAgendamentos = document.getElementById('modal-agendamentos');
+        
+        if (event.target === modalTelefone) {
+            modalTelefone.style.display = 'none';
+        }
+        if (event.target === modalAgendamentos) {
+            modalAgendamentos.style.display = 'none';
+        }
+    }
+
+
+
+</script>
+
+</body>
+</html>

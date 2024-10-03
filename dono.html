@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Agendamentos - Havi Barber</title>
+    <link rel="stylesheet" href="dono.css"> <!-- Importação do arquivo CSS separado -->
+</head>
+<body>
+
+<!-- Cabeçalho -->
+<div class="header">
+    <img src="./imagens/logo.png.jpg" alt="Logo Havi Barber">
+    <p>📍 Rua São Domingos Nº 807 - Cidade Nova</p>
+    <h1>Gerenciamento de Agendamentos</h1>
+</div>
+
+<!-- Tabela de Agendamentos -->
+<section id="agendamentos">
+    <h2>Agendamentos Atuais:</h2>
+    <table id="tabela-agendamentos">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Telefone</th>
+                <th>Data</th>
+                <th>Horário</th>
+                <th>Serviço</th>
+                <th>Preço</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody id="agendamento-corpo">
+            <!-- Os agendamentos serão inseridos aqui via JavaScript -->
+        </tbody>
+    </table>
+</section>
+
+<!-- Script para inserir os agendamentos diretamente -->
+<script>
+    // Função para buscar e exibir agendamentos da API
+    // Função para buscar e exibir agendamentos da API
+async function exibirAgendamentos() {
+    const tabelaBody = document.querySelector('#agendamento-corpo');
+    tabelaBody.innerHTML = '';  // Limpa o corpo da tabela antes de inserir os novos agendamentos
+
+    try {
+        // Faz a requisição para buscar os agendamentos
+        const response = await fetch('/agendamentos');
+        const agendamentos = await response.json();
+        
+        // Itera pelos agendamentos e cria uma nova linha para cada um
+        agendamentos.forEach(agendamento => {
+            const data = agendamento.data && agendamento.data !== '0001-01-01' ? agendamento.data : 'Data não informada';
+            const horario = agendamento.horario ? agendamento.horario : 'Horário não informado';
+            
+            // Cria uma nova linha para cada agendamento
+            const row = document.createElement('tr');
+            
+            // Cria as células (colunas) e insere os dados
+            const nomeCell = document.createElement('td');
+            nomeCell.textContent = agendamento.nome;
+            nomeCell.setAttribute('data-label', 'Nome'); // Adiciona o data-label
+            
+            const telefoneCell = document.createElement('td');
+            telefoneCell.textContent = agendamento.telefone;
+            telefoneCell.setAttribute('data-label', 'Telefone'); // Adiciona o data-label
+            
+            const dataCell = document.createElement('td');
+            dataCell.textContent = data;
+            dataCell.setAttribute('data-label', 'Data'); // Adiciona o data-label
+            
+            const horarioCell = document.createElement('td');
+            horarioCell.textContent = horario;
+            horarioCell.setAttribute('data-label', 'Horário'); // Adiciona o data-label
+            
+            const servicoCell = document.createElement('td');
+            servicoCell.textContent = agendamento.servico;
+            servicoCell.setAttribute('data-label', 'Serviço'); // Adiciona o data-label
+            
+            const precoCell = document.createElement('td');
+            precoCell.textContent = agendamento.preco;
+            precoCell.setAttribute('data-label', 'Preço'); // Adiciona o data-label
+            
+            const acaoCell = document.createElement('td');
+            const removerButton = document.createElement('button');
+            removerButton.textContent = 'Remover';
+            removerButton.onclick = () => removerAgendamento(agendamento._id);
+            acaoCell.appendChild(removerButton);
+            acaoCell.setAttribute('data-label', 'Ação'); // Adiciona o data-label
+            
+            // Adiciona todas as células à linha
+            row.appendChild(nomeCell);
+            row.appendChild(telefoneCell);
+            row.appendChild(dataCell);
+            row.appendChild(horarioCell);
+            row.appendChild(servicoCell);
+            row.appendChild(precoCell);
+            row.appendChild(acaoCell);
+            
+            // Adiciona a linha à tabela
+            tabelaBody.appendChild(row);
+        });
+
+        // Força a exibição do tbody (caso ele esteja oculto)
+        document.querySelector('#agendamento-corpo').style.display = 'table-row-group';
+
+    } catch (error) {
+        console.error('Erro ao buscar agendamentos:', error);
+    }
+}
+
+
+    // Função para remover agendamento da API
+    async function removerAgendamento(id) {
+        const confirma = confirm('Tem certeza que deseja remover este agendamento?');
+        if (confirma) {
+            try {
+                const response = await fetch(`/agendamentos/${id}`, {
+                    method: 'DELETE',
+                });
+
+                if (response.ok) {
+                    alert('Agendamento removido com sucesso!');
+                    location.reload(); // Atualiza a página para refletir a remoção
+                } else {
+                    alert('Erro ao remover agendamento.');
+                }
+            } catch (error) {
+                console.error('Erro ao remover agendamento:', error);
+            }
+        }
+    }
+
+    // Carrega os agendamentos ao iniciar a página
+    exibirAgendamentos();
+</script>
+
+</body>
+</html>

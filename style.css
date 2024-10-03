@@ -1,0 +1,448 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #fff;
+    color: #000;
+}
+
+#tela-1 h2 {
+    font-size: 20px; 
+    margin-top: 20px; 
+    margin-bottom: 20px;
+}
+
+
+#tela-2 h2 {
+    font-size: 20px; 
+    margin-top: 20px; 
+    margin-bottom: 20px;
+}
+
+
+section {
+    padding: 20px;
+    display: none;
+}
+
+.active {
+    display: block;
+}
+
+
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #000;
+    color: #fff;
+    padding: 40px;
+    margin-top: -40px;
+    border-bottom-left-radius: 50px;
+    border-bottom-right-radius: 50px;
+}
+
+.header img {
+    width: 180px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.header p {
+    font-size: 14px;
+    text-align: center;
+}
+
+.header button {
+    background-color: #fff;
+    color: #000;
+    padding: 10px 40px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+}
+
+.header button:hover {
+    background-color: #ddd;
+}
+
+.service {
+    background-color: #000;
+    color: #fff;
+    border-radius: 20px;
+    padding: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.service .icon img {
+    width: 40px;
+    height: auto;
+    margin-right: 10px;
+}
+
+.service p {
+    flex-grow: 1;
+    margin-right: 20px;
+    font-size: 16px;
+}
+
+.service p span {
+    display: block;
+    margin-top: 5px;
+    font-size: 18px;
+    color: #aaa;
+}
+
+button {
+    background-color: #fff;
+    color: #000;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #ddd;
+}
+
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 20px;
+}
+
+form label {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 2px solid #000;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+form input[type="date"] {
+    padding-left: 15px;
+}
+
+form button {
+    align-self: center;
+    background-color: #000; 
+    color: #fff;
+    width: 80%;
+    padding: 15px 15px;
+    border: none;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 40px; 
+}
+
+form button:hover {
+    background-color: #333;
+}
+
+.horarios {
+    display: grid;
+    grid-template-columns: repeat(4, min-content); 
+    gap: 5px;
+    justify-content: center; 
+    margin-top: 20px;
+}
+
+
+.horarios button {
+    background-color: #f5f5f5;
+    color: #000;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 8px;
+    width: 80px;
+    text-align: center;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 2px 0; 
+}
+
+
+.horarios button:hover {
+    background-color: #0000008a;
+}
+
+.horarios button.selected {
+    background-color: #7775758e;
+    border-color: #000000;
+    color: #000; 
+}
+
+/* Estilo geral para o modal */
+.modal {
+    display: none; /* Oculto por padrão */
+    position: fixed;
+    z-index: 1000; /* Garantir que o modal esteja na frente */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo semitransparente */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Conteúdo do modal */
+.modal-content {
+    background-color: #fff;
+    margin: auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    position: relative;
+}
+
+/* Botão de fechar o modal */
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+}
+
+/* Centralizando o texto */
+.modal-content h2,
+.modal-content p {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Campo de entrada de telefone */
+#telefoneModalInput {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/* Botões do modal */
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.modal-button {
+    width: 48%;
+    padding: 10px 0;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Estilo do botão de voltar */
+#voltarBtn {
+    background-color: #ccc;
+}
+
+/* Estilo do botão confirmar */
+.confirm {
+    background-color: #28a745; /* Verde */
+    color: white;
+}
+
+.confirm:hover {
+    background-color: #218838;
+}
+
+
+@media (min-width: 600px) {
+    .header img {
+        width: 180px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    .service p {
+        font-size: 18px;
+    }
+
+    button {
+        font-size: 16px;
+    }
+
+    form input {
+        font-size: 16px;
+    }
+}
+
+/* Estilo responsivo para telas menores */
+@media screen and (max-width: 768px) {
+    /* Esconde a tabela padrão em telas pequenas */
+    #tabela-agendamentos thead {
+        display: none;
+    }
+
+    #tabela-agendamentos, #tabela-agendamentos tbody, #tabela-agendamentos tr, #tabela-agendamentos td {
+        display: block;
+        width: 100%;
+    }
+
+    #tabela-agendamentos tr {
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        padding: 10px;
+        border-radius: 10px;
+        background-color: white;
+        max-width: 500px; /* Define uma largura máxima para os cartões */
+        margin-left: auto;
+        margin-right: auto; /* Centraliza os cartões */
+        display: flex;
+        flex-direction: column; /* Faz com que os itens dentro da linha fiquem um embaixo do outro */
+        align-items: stretch; /* Centraliza os itens do cartão */
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra para destacar os cartões */
+    }
+
+    /* Cada célula será exibida como um "mini bloco" */
+    #tabela-agendamentos td {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        border: none;
+        width: 100%;
+    }
+
+    #tabela-agendamentos td:before {
+        content: attr(data-label); /* Exibe o cabeçalho da coluna */
+        flex: 1;
+        text-align: left;
+        font-weight: bold;
+        padding-right: 10px;
+    }
+
+    /* Botão de remover com ajuste no tamanho, cor e bordas arredondadas */
+    #tabela-agendamentos td button {
+        background-color: #ff4d4d; /* Vermelho mais vivo */
+        color: white;
+        border: none;
+        padding: 8px;
+        border-radius: 8px; /* Arredonda os cantos */
+        font-size: 14px; /* Diminui o tamanho da fonte para um botão menor */
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    /* Reduz o tamanho do botão de remover */
+    #tabela-agendamentos td button.remover {
+        width: 80%;  /* Diminui a largura do botão */
+        background-color: #e60000; /* Vermelho mais intenso para o botão de remover */
+    }
+
+    #tabela-agendamentos td button:hover {
+        background-color: #ff1a1a; /* Cor de hover para o vermelho */
+    }
+
+    /* Alinhamento do botão "Remover" com o título "Ação" */
+    #tabela-agendamentos td[data-label="Ação"] {
+        display: flex;
+        justify-content: flex-start; /* Garante que o título "Ação" fique alinhado à esquerda */
+        align-items: center; /* Alinha o botão ao centro verticalmente */
+    }
+
+    /* Garante que o container da tabela ocupe 100% da largura disponível e centralize o conteúdo */
+    #tabela-agendamentos {
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Centraliza os cartões no container */
+        padding: 0 15px; /* Adiciona um pequeno espaçamento lateral */
+    }
+}
+
+/* Estilo geral dos cartões */
+.card {
+    background-color: white; /* Fundo branco para os cartões */
+    border: 1px solid #ddd; /* Borda cinza clara */
+    border-radius: 10px; /* Bordas arredondadas */
+    padding: 20px; /* Espaçamento interno */
+    margin: 10px; /* Margem externa */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    display: flex; /* Flexbox para organizar conteúdo */
+    flex-direction: column; /* Alinha os itens em coluna */
+    transition: transform 0.2s; /* Transição suave ao passar o mouse */
+}
+
+/* Efeito ao passar o mouse sobre o cartão */
+.card:hover {
+    transform: translateY(-2px); /* Move o cartão levemente para cima */
+}
+
+/* Estilo para o título do cartão */
+.card h3 {
+    margin: 0 0 10px; /* Margem abaixo do título */
+    font-size: 1.5em; /* Tamanho da fonte do título */
+}
+
+/* Estilo para os detalhes do cartão */
+.card p {
+    margin: 5px 0; /* Margem em torno dos parágrafos */
+    color: #555; /* Cor do texto */
+}
+
+/* Estilo para o botão de remover */
+.remove-button {
+    background-color: #ff4d4d; /* Vermelho */
+    color: white; /* Texto branco */
+    border: none; /* Sem borda */
+    padding: 5px; /* Espaçamento interno do botão */
+    border-radius: 20px; /* Bordas arredondadas */
+    cursor: pointer; /* Cursor em forma de mão ao passar sobre o botão */
+    transition: background-color 0.3s; /* Transição suave ao mudar a cor */
+}
+
+/* Efeito de hover para o botão de remover */
+.remove-button:hover {
+    background-color: #e60000; /* Vermelho mais intenso */
+}
+
+/* Estilo responsivo para telas menores */
+@media screen and (max-width: 768px) {
+    .card {
+        margin: 5px; /* Menos margem em telas pequenas */
+    }
+}

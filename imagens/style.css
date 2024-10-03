@@ -1,0 +1,223 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #fff;
+    color: #000;
+}
+
+#tela-1 h2 {
+    font-size: 20px; 
+    margin-top: 20px; 
+    margin-bottom: 20px;
+}
+
+
+#tela-2 h2 {
+    font-size: 20px; 
+    margin-top: 20px; 
+    margin-bottom: 20px;
+}
+
+
+section {
+    padding: 20px;
+    display: none;
+}
+
+.active {
+    display: block;
+}
+
+
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #000;
+    color: #fff;
+    padding: 40px;
+    margin-top: -40px;
+    border-bottom-left-radius: 50px;
+    border-bottom-right-radius: 50px;
+}
+
+.header img {
+    width: 180px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.header p {
+    font-size: 14px;
+    text-align: center;
+}
+
+.header button {
+    background-color: #fff;
+    color: #000;
+    padding: 10px 40px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+}
+
+.header button:hover {
+    background-color: #ddd;
+}
+
+.service {
+    background-color: #000;
+    color: #fff;
+    border-radius: 20px;
+    padding: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.service .icon img {
+    width: 40px;
+    height: auto;
+    margin-right: 10px;
+}
+
+.service p {
+    flex-grow: 1;
+    margin-right: 20px;
+    font-size: 16px;
+}
+
+.service p span {
+    display: block;
+    margin-top: 5px;
+    font-size: 18px;
+    color: #aaa;
+}
+
+button {
+    background-color: #fff;
+    color: #000;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #ddd;
+}
+
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 20px;
+}
+
+form label {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 2px solid #000;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+form input[type="date"] {
+    padding-left: 15px;
+}
+
+form button {
+    align-self: center;
+    background-color: #000; 
+    color: #fff;
+    width: 80%;
+    padding: 15px 15px;
+    border: none;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 40px; 
+}
+
+form button:hover {
+    background-color: #333;
+}
+
+.horarios {
+    display: grid;
+    grid-template-columns: repeat(4, min-content); 
+    gap: 5px;
+    justify-content: center; 
+    margin-top: 20px;
+}
+
+
+.horarios button {
+    background-color: #f5f5f5;
+    color: #000;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 8px;
+    width: 80px;
+    text-align: center;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 2px 0; 
+}
+
+
+.horarios button:hover {
+    background-color: #0000008a;
+}
+
+.horarios button.selected {
+    background-color: #7775758e;
+    border-color: #000000;
+    color: #000; 
+}
+
+
+@media (min-width: 600px) {
+    .header img {
+        width: 180px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    .service p {
+        font-size: 18px;
+    }
+
+    button {
+        font-size: 16px;
+    }
+
+    form input {
+        font-size: 16px;
+    }
+}
