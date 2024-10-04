@@ -325,6 +325,9 @@ async function confirmarAgendamento() {
                 body: JSON.stringify(agendamento),
             });
 
+            console.log('Status da resposta:', response.status);
+            console.log('Resposta OK:', response.ok);
+
             if (response.ok) {
                 const dataResponse = await response.json();
                 console.log('Agendamento confirmado:', dataResponse);
@@ -347,7 +350,8 @@ async function confirmarAgendamento() {
             } else if (response.status === 409) {
                 alert('O horário já foi agendado por outro cliente. Por favor, escolha outro horário.');
             } else {
-                console.error('Erro ao confirmar agendamento');
+                const errorText = await response.text();  // Tenta ler a resposta como texto
+                console.error('Erro ao confirmar agendamento:', errorText);
                 alert('Ocorreu um erro ao tentar confirmar o agendamento. Tente novamente.');
             }
         } catch (error) {
