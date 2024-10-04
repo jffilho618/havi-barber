@@ -70,15 +70,12 @@ def create_agendamento():
     horario = data.get("horario")
     data_agendamento = data.get("data")
 
-    # Verifique o horário atual
-    current_time_response = requests.get('https://havi-barber-nine.vercel.app/current-time')  # Substitua pelo seu endpoint de produção
-    if current_time_response.status_code == 200:
-        current_time_data = current_time_response.json()
-        current_time = current_time_data["current_time"]  # Formato: "YYYY-MM-DD HH:MM:SS"
+    # Verifica se o horário já passou
+    agendamento_data_hora = datetime.strptime(f"{data_agendamento} {horario}", "%Y-%m-%d %H:%M")
+    agora = datetime.now()
 
-        # Compare o horário agendado com o horário atual
-        if f"{data_agendamento} {horario}" < current_time:
-            return jsonify({"error": "Não é possível agendar para um horário no passado."}), 400
+    if agendamento_data_hora < agora:
+        return jsonify({"error": "Não é possível agendar para um horário no passado."}), 400
 
     # Verifica se o horário já está reservado
     agendamento_existente = agendamentos_collection.find_one({
@@ -89,6 +86,17 @@ def create_agendamento():
     if agendamento_existente:
         return jsonify({"error": "Horário já reservado."}), 409  # Conflito
 
+    # Verifica se o horário é no passado
+    agendamento_datetime_str = f"{data_agendamento}T{horario}"
+    agendamento_datetime = datetime.strptime(agendamento_datetime_str, "%Y-%m-%dT%H:%M")
+
+    # Obtém a data e hora atual
+    data_hora_atual = datetime.now()
+
+    if agendamento_datetime < data_hora_atual:
+        return jsonify({"error": "Não é possível agendar para um horário no passado."}), 400  # Solicitação inválida
+
+    # Insere o agendamento no banco de dados
     result = agendamentos_collection.insert_one(data)
     data['_id'] = str(result.inserted_id)
 
@@ -184,18 +192,6 @@ def get_horarios_disponiveis():
     except Exception as e:
         return jsonify({'error': 'Erro interno do servidor.'}), 500
 
-@app.route('/current-time', methods=['GET'])
-def current_time():
-    from datetime import datetime
-    
-    # Define o fuso horário local (exemplo: São Paulo)
-    fuso_horario = pytz.timezone('America/Sao_Paulo')
-    agora = datetime.now(fuso_horario)
-    
-    return jsonify({
-        'current_time': agora.strftime('%Y-%m-%d %H:%M:%S'),
-        'timezone': str(fuso_horario)
-    })
 
 
 if __name__ == "__main__":
