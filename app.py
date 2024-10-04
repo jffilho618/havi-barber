@@ -11,7 +11,7 @@ app.secret_key = 'bomba'  # Substitua por uma chave secreta única
 
 
 # Conexão com o MongoDB
-client = MongoClient("mongodb+srv://jffilho618:AzrNtnNxi2dmKzkd@havibarber.6ui8c.mongodb.net/?retryWrites=true&w=majority&appName=havibarber")
+client = MongoClient("mongodb+srv://jffilho618:Yn9CWR3vSEePyfvX@havibarber.6ui8c.mongodb.net/?retryWrites=true&w=majority&appName=havibarber")
 db = client['nome_do_banco']  # Substitua pelo nome do seu banco de dados
 agendamentos_collection = db['agendamentos']
 usuarios_collection = db['usuários']  # Coleção para armazenar usuários/barbeiros
