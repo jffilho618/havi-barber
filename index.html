@@ -152,19 +152,7 @@ function carregarHorariosDisponiveis() {
             const horariosContainer = document.querySelector('.horarios');
             horariosContainer.innerHTML = ''; // Limpa horários anteriores
 
-            // Obtém o horário atual
-            const agora = new Date();
-            const horaAtual = agora.getHours();
-            const minutosAtual = agora.getMinutes();
-            const horarioAtual = `${horaAtual < 10 ? '0' : ''}${horaAtual}:${minutosAtual < 10 ? '0' : ''}${minutosAtual}`;
-
             horarios.forEach(horario => {
-                // Compara os horários disponíveis com o horário atual
-                if (data === new Date().toISOString().split('T')[0] && horario < horarioAtual) {
-                    console.log(`Horário ${horario} não será exibido porque já passou.`);
-                    return; // Não exibe horários que já passaram
-                }
-
                 const button = document.createElement('button');
                 button.type = 'button';
                 button.textContent = horario;
@@ -176,7 +164,6 @@ function carregarHorariosDisponiveis() {
             console.error('Erro ao carregar horários:', error);
         });
 }
-
 
 
 
@@ -271,13 +258,7 @@ async function confirmarAgendamento() {
         mostrarErro(data, 'Data é obrigatória.');
         camposValidos = false;
     } else {
-        const hoje = new Date().toISOString().split('T')[0];  // Data atual no formato yyyy-mm-dd
-        if (data.value < hoje) {
-            mostrarErro(data, 'Não é possível agendar para uma data no passado.');
-            camposValidos = false;
-        } else {
-            limparErro(data);
-        }
+        limparErro(data);
     }
 
     if (horario.value.trim() === '') {
@@ -292,76 +273,43 @@ async function confirmarAgendamento() {
         return;
     }
 
-    // Log para verificar valores de data e horário
-    console.log("Data selecionada:", data.value);
-    console.log("Horário selecionado:", horario.value);
+    const agendamento = {
+        nome: nome.value,
+        telefone: telefone.value,
+        data: data.value,
+        horario: horario.value,
+    };
 
-    const chaveAgendamento = `${data.value} ${horario.value}`;
+    try {
+        const response = await fetch('/agendamentos', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(agendamento),
+        });
 
-    if (horariosAgendados[chaveAgendamento]) {
-        console.log(`Horário indisponível: ${chaveAgendamento}`);
-        alert(`O horário ${horario.value} do dia ${data.value} já está agendado. Por favor, escolha outro horário.`);
-        return;
-    }
+        if (response.ok) {
+            const dataResponse = await response.json();
+            console.log('Agendamento confirmado:', dataResponse);
 
-    const confirmar = confirm(`Você deseja agendar para ${data.value} às ${horario.value}?`);
+            // Redirecionar para WhatsApp ou realizar outra ação aqui
 
-    if (confirmar) {
-        const agendamento = {
-            nome: nome.value,
-            telefone: telefone.value,
-            data: data.value,
-            horario: horario.value,
-            servico: servicoSelecionado,
-            preco: precoSelecionado
-        };
-
-        try {
-            const response = await fetch('/agendamentos', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(agendamento),
-            });
-
-            console.log('Status da resposta:', response.status);
-            console.log('Resposta OK:', response.ok);
-
-            if (response.ok) {
-                const dataResponse = await response.json();
-                console.log('Agendamento confirmado:', dataResponse);
-
-                horariosAgendados[chaveAgendamento] = true;
-
-                // Verificar se nome, data e horário estão corretos antes de montar a mensagem
-                console.log("Valores para mensagem WhatsApp:");
-                console.log("Nome:", nome.value);
-                console.log("Data:", data.value);
-                console.log("Horário:", horario.value);
-
-                // Monta a mensagem para o WhatsApp
-                const mensagem = `Olá, meu nome é ${nome.value}. Gostaria de confirmar o agendamento para ${data.value} às ${horario.value}. Meu telefone é ${telefone.value}.`;
-                const mensagemCodificada = encodeURIComponent(mensagem);
-                const numeroWhatsapp = "5586995779567";
-                const link = `https://wa.me/${numeroWhatsapp}?text=${mensagemCodificada}`;
-
-                window.location.href = link;
-            } else if (response.status === 409) {
-                alert('O horário já foi agendado por outro cliente. Por favor, escolha outro horário.');
-            } else {
-                const errorText = await response.text();  // Tenta ler a resposta como texto
-                console.error('Erro ao confirmar agendamento:', errorText);
-                alert('Ocorreu um erro ao tentar confirmar o agendamento. Tente novamente.');
-            }
-        } catch (error) {
-            console.error('Erro de comunicação com o servidor:', error);
-            alert('Erro de comunicação com o servidor. Por favor, tente novamente mais tarde.');
+        } else if (response.status === 409) {
+            alert('O horário já foi agendado por outro cliente. Por favor, escolha outro horário.');
+        } else if (response.status === 400) {
+            const errorResponse = await response.json();
+            alert(errorResponse.error);  // Aqui você captura e exibe o erro que foi retornado
+        } else {
+            console.error('Erro ao confirmar agendamento');
+            alert('Ocorreu um erro ao tentar confirmar o agendamento. Tente novamente.');
         }
-    } else {
-        alert('Agendamento cancelado.');
+    } catch (error) {
+        console.error('Erro de comunicação com o servidor:', error);
+        alert('Erro de comunicação com o servidor. Por favor, tente novamente mais tarde.');
     }
 }
+
 
 
 
