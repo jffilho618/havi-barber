@@ -178,6 +178,19 @@ def get_horarios_disponiveis():
     except Exception as e:
         return jsonify({'error': 'Erro interno do servidor.'}), 500
 
+@app.route('/current-time', methods=['GET'])
+def current_time():
+    import pytz
+    from datetime import datetime
+    
+    # Define o fuso horário local (exemplo: São Paulo)
+    fuso_horario = pytz.timezone('America/Sao_Paulo')
+    agora = datetime.now(fuso_horario)
+    
+    return jsonify({
+        'current_time': agora.strftime('%Y-%m-%d %H:%M:%S'),
+        'timezone': str(fuso_horario)
+    })
 
 
 if __name__ == "__main__":
