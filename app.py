@@ -70,13 +70,6 @@ def create_agendamento():
     horario = data.get("horario")
     data_agendamento = data.get("data")
 
-    # Verifica se o horário já passou
-    agendamento_data_hora = datetime.strptime(f"{data_agendamento} {horario}", "%Y-%m-%d %H:%M")
-    agora = datetime.now()
-
-    if agendamento_data_hora < agora:
-        return jsonify({"error": "Não é possível agendar para um horário no passado."}), 400
-
     # Verifica se o horário já está reservado
     agendamento_existente = agendamentos_collection.find_one({
         "data": data_agendamento,
@@ -191,8 +184,6 @@ def get_horarios_disponiveis():
 
     except Exception as e:
         return jsonify({'error': 'Erro interno do servidor.'}), 500
-
-
 
 if __name__ == "__main__":
     app.run(debug=True)
