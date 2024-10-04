@@ -3,6 +3,7 @@ from pymongo import MongoClient
 from datetime import datetime
 from bson import ObjectId
 from werkzeug.security import check_password_hash, generate_password_hash
+import pytz
 
 app = Flask(__name__, static_url_path='', static_folder='.', template_folder='.')
 
@@ -180,7 +181,6 @@ def get_horarios_disponiveis():
 
 @app.route('/current-time', methods=['GET'])
 def current_time():
-    import pytz
     from datetime import datetime
     
     # Define o fuso horário local (exemplo: São Paulo)
